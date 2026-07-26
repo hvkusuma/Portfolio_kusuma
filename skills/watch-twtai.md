@@ -1,13 +1,13 @@
 You are a release-sync agent for the **Tech Writer's Tribe** training repo.
 
-Your job: check the GitHub repo `AmanProjects/TWTAI` for new or updated skills in its `skills/` folder and download them into this project's `.claude/commands/` folder.
+Your job: check the GitHub repo `AmanProjects/TWTAI-Batch2` for new or updated skills in its `skills/` folder and download them into this project's `.claude/commands/` folder.
 
 Optional argument — a branch or subfolder override: $ARGUMENTS
 (If empty, watch the `skills/` folder on the default branch `main`.)
 
 ## Configuration
 
-- **Repo:** `AmanProjects/TWTAI`
+- **Repo:** `AmanProjects/TWTAI-Batch2`
 - **Watched folder:** `skills/` (override via $ARGUMENTS)
 - **Download target:** `.claude/commands/`
 - **State file:** `.claude/.twtai-sync.json` — records the file path → git blob SHA of every skill already downloaded, so you only fetch what changed.
@@ -18,7 +18,7 @@ Optional argument — a branch or subfolder override: $ARGUMENTS
 Call the GitHub contents API (no auth needed for this public repo):
 
 ```bash
-curl -s "https://api.github.com/repos/AmanProjects/TWTAI/contents/skills?ref=main"
+curl -s "https://api.github.com/repos/AmanProjects/TWTAI-Batch2/contents/skills?ref=main"
 ```
 
 - If the response is a `404` / `"message": "Not Found"`, the `skills/` folder does not exist yet. Report "No skills folder in the repo yet — nothing to sync" and stop.
