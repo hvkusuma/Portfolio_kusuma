@@ -388,7 +388,7 @@
 
   <main class="stage" id="stage">
     <section class="slide" id="slide-1">
-      <div class="slide-number">1 / 15</div>
+      <div class="slide-number">1 / 18</div>
       <div class="slide-body"><h1>Sharing Your Skills</h1>
 <h3>Marketplaces & Plugins</h3>
 <h4>Module 4 of 8 | 🟡 Intermediate Level</h4>
@@ -398,7 +398,7 @@
     </section>
 
     <section class="slide" id="slide-2">
-      <div class="slide-number">2 / 15</div>
+      <div class="slide-number">2 / 18</div>
       <div class="slide-body"><h1>Quick Recap: Module 3</h1>
 <ul>
 <li>The RTCCO framework: Role, Task, Context, Constraints, Output</li>
@@ -411,7 +411,7 @@
     </section>
 
     <section class="slide" id="slide-3">
-      <div class="slide-number">3 / 15</div>
+      <div class="slide-number">3 / 18</div>
       <div class="slide-body"><h1>A Skill on One Laptop Helps One Person</h1>
 <p>Right now your skill lives in <strong>your</strong> <code>.claude/</code> folder.</p>
 <p>A teammate wants it. What do you do — email the file? Paste it in Slack?</p>
@@ -428,7 +428,7 @@
     </section>
 
     <section class="slide" id="slide-4">
-      <div class="slide-number">4 / 15</div>
+      <div class="slide-number">4 / 18</div>
       <div class="slide-body"><h1>The Hierarchy</h1>
 <pre class="code-block"><code>Marketplace          ← a catalog (one GitHub repo) listing plugins
   └── Plugin         ← the shareable bundle you install
@@ -442,7 +442,7 @@
     </section>
 
     <section class="slide" id="slide-5">
-      <div class="slide-number">5 / 15</div>
+      <div class="slide-number">5 / 18</div>
       <div class="slide-body"><h1>The Four Nouns</h1>
 <table>
 <thead><tr><th>Term</th><th>What it is</th><th>Analogy</th></tr></thead>
@@ -457,20 +457,80 @@
     </section>
 
     <section class="slide" id="slide-6">
-      <div class="slide-number">6 / 15</div>
-      <div class="slide-body"><h1>Command vs. Skill vs. Agent</h1>
+      <div class="slide-number">6 / 18</div>
+      <div class="slide-body"><h1>Command vs. Skill vs. Agent vs. Hook</h1>
+<p>All four are "instructions Claude Code follows" — they differ in <strong>who triggers them</strong> and <strong>how much isolation they get</strong>.</p>
 <ul>
-<li><strong>Command</strong> — runs when you type <code>/name</code>. Everything you built in Module 3.</li>
-<li><strong>Skill</strong> — a <code>SKILL.md</code> with a <code>description</code>, so Claude can <strong>auto-invoke</strong> it.</li>
+<li><strong>Command</strong> — runs when <em>you</em> type <code>/name</code>. Everything you built in Module 3.</li>
+<li><strong>Skill</strong> — a <code>SKILL.md</code> with a <code>description</code>, so Claude can <strong>auto-invoke</strong> it too.</li>
 <li><strong>Agent</strong> — an isolated worker with its own tools & model, for <strong>delegated multi-step jobs</strong>.</li>
+<li><strong>Hook</strong> — a shell command that fires automatically on an event. No reasoning, never skipped.</li>
 </ul>
-<p><strong>Namespacing</strong> prevents collisions — a <code>check-style</code> command in the <code>doc-skills</code> plugin runs as:</p>
-<pre class="code-block"><code>/doc-skills:check-style</code></pre>
+<blockquote>We'll build one small example of each — using the same style-check task — so you can see all four side by side.</blockquote>
 </div>
     </section>
 
     <section class="slide" id="slide-7">
-      <div class="slide-number">7 / 15</div>
+      <div class="slide-number">7 / 18</div>
+      <div class="slide-body"><h1>Example: Command vs. Skill</h1>
+<p><strong>Command</strong> — <code>commands/check-style.md</code> — runs only when typed:</p>
+<pre class="code-block"><code>You are a technical editor. Review: $ARGUMENTS
+
+Check for active voice, sentences &lt;25 words,
+sentence-case headings.
+
+Output a table: Line | Issue | Fix</code></pre>
+<p>Usage: <code>/check-style docs/orders-api.md</code></p>
+<p><strong>Skill</strong> — <code>skills/doc-coverage/SKILL.md</code> — same idea, plus a <code>description</code> Claude reads to auto-invoke it:</p>
+<pre class="code-block"><code>---
+name: doc-coverage
+description: Use when a code change might need
+  matching documentation updates.
+---
+Compare the diff at $ARGUMENTS against docs/...</code></pre>
+</div>
+    </section>
+
+    <section class="slide" id="slide-8">
+      <div class="slide-number">8 / 18</div>
+      <div class="slide-body"><h1>Example: Agent vs. Hook</h1>
+<p><strong>Agent</strong> — <code>agents/doc-auditor.md</code> — its own context, tools & model, for multi-file jobs:</p>
+<pre class="code-block"><code>---
+name: doc-auditor
+description: Audits an entire docs set. Use for
+  multi-file jobs, not single-file checks.
+tools: Read, Grep, Glob
+model: sonnet
+---
+Read every file in the folder, apply style +
+completeness rules, return one ranked report.</code></pre>
+<p>Usage: <em>"Use the doc-auditor agent to review everything in docs/."</em> Only the final report returns to your conversation.</p>
+<p><strong>Hook</strong> — <code>hooks/hooks.json</code> — fires on every edit, no prompt involved:</p>
+<pre class="code-block"><code>{ "hooks": { "PostToolUse": [{ "matcher": "Edit|Write",
+  "hooks": [{ "type": "command",
+    "command": "echo 'Reminder: run /check-style'" }] }] } }</code></pre>
+</div>
+    </section>
+
+    <section class="slide" id="slide-9">
+      <div class="slide-number">9 / 18</div>
+      <div class="slide-body"><h1>How the Four Connect</h1>
+<table>
+<thead><tr><th></th><th>Triggered by</th><th>Isolation</th><th>Best for</th></tr></thead>
+<tbody>
+<tr><td><strong>Hook</strong></td><td>An event (edit, commit, session end)</td><td>None — just runs a command</td><td>Rules that must <em>always</em> fire</td></tr>
+<tr><td><strong>Command</strong></td><td>You, typing <code>/name</code></td><td>Your current conversation</td><td>A check you consciously run</td></tr>
+<tr><td><strong>Skill</strong></td><td>You, or Claude automatically</td><td>Your current conversation</td><td>"Whenever a request looks like X..."</td></tr>
+<tr><td><strong>Agent</strong></td><td>You, or Claude delegating</td><td>Its own context window</td><td>A multi-step job too big to run inline</td></tr>
+</tbody></table>
+<blockquote>Hook nudges you → Command/Skill checks one file → Agent handles the full sweep. All four ship inside one <strong>plugin</strong>, distributed by a <strong>marketplace</strong>.</blockquote>
+<p><strong>Namespacing</strong> prevents collisions — bundled in the <code>doc-skills</code> plugin, <code>check-style</code> runs as:</p>
+<pre class="code-block"><code>/doc-skills:check-style</code></pre>
+</div>
+    </section>
+
+    <section class="slide" id="slide-10">
+      <div class="slide-number">10 / 18</div>
       <div class="slide-body"><h1>Installing — Step 1: Add the Marketplace</h1>
 <pre class="code-block"><code>/plugin marketplace add AmanProjects/twtai-skill</code></pre>
 <p>→ <code>Successfully added marketplace: twtai</code></p>
@@ -484,8 +544,8 @@
 </div>
     </section>
 
-    <section class="slide" id="slide-8">
-      <div class="slide-number">8 / 15</div>
+    <section class="slide" id="slide-11">
+      <div class="slide-number">11 / 18</div>
       <div class="slide-body"><h1>Installing — Step 2: Install the Plugin</h1>
 <pre class="code-block"><code>/plugin install doc-skills@twtai</code></pre>
 <blockquote><code>twtai</code> is the marketplace <strong>name</strong>, not the repo (<code>twtai-skill</code>).</blockquote>
@@ -496,8 +556,8 @@
 </div>
     </section>
 
-    <section class="slide" id="slide-9">
-      <div class="slide-number">9 / 15</div>
+    <section class="slide" id="slide-12">
+      <div class="slide-number">12 / 18</div>
       <div class="slide-body"><h1>A Real Repo: <code>AmanProjects/twtai-skill</code></h1>
 <pre class="code-block"><code>twtai-skill/                       ← marketplace repo (GitHub)
 ├── .claude-plugin/marketplace.json ← the catalog (name: twtai)
@@ -513,8 +573,8 @@
 </div>
     </section>
 
-    <section class="slide" id="slide-10">
-      <div class="slide-number">10 / 15</div>
+    <section class="slide" id="slide-13">
+      <div class="slide-number">13 / 18</div>
       <div class="slide-body"><h1>The Two Files That Make It Work</h1>
 <p><strong><code>marketplace.json</code></strong> (repo root, in <code>.claude-plugin/</code>) — the catalog:</p>
 <pre class="code-block"><code>{
@@ -532,8 +592,8 @@
 </div>
     </section>
 
-    <section class="slide" id="slide-11">
-      <div class="slide-number">11 / 15</div>
+    <section class="slide" id="slide-14">
+      <div class="slide-number">14 / 18</div>
       <div class="slide-body"><h1>Workshop: Publish Your Own</h1>
 <p>Work in pairs — one publishes, one installs, then switch.</p>
 <p><strong>The 5-step loop:</strong></p>
@@ -552,8 +612,8 @@
 </div>
     </section>
 
-    <section class="slide" id="slide-12">
-      <div class="slide-number">12 / 15</div>
+    <section class="slide" id="slide-15">
+      <div class="slide-number">15 / 18</div>
       <div class="slide-body"><h1>When a Marketplace Is Overkill</h1>
 <table>
 <thead><tr><th>Situation</th><th>Lightweight option</th></tr></thead>
@@ -566,8 +626,8 @@
 </div>
     </section>
 
-    <section class="slide" id="slide-13">
-      <div class="slide-number">13 / 15</div>
+    <section class="slide" id="slide-16">
+      <div class="slide-number">16 / 18</div>
       <div class="slide-body"><h1>Discussion</h1>
 <ol>
 <li>What's one skill you'd publish first — and who's the audience?</li>
@@ -582,8 +642,8 @@
 </div>
     </section>
 
-    <section class="slide" id="slide-14">
-      <div class="slide-number">14 / 15</div>
+    <section class="slide" id="slide-17">
+      <div class="slide-number">17 / 18</div>
       <div class="slide-body"><h1>Before Module 5</h1>
 <ol>
 <li><strong>Publish</strong> a marketplace — use <code>AmanProjects/twtai-skill</code> as a template; one repo, one plugin, at least one of your skills</li>
@@ -593,13 +653,14 @@
 </div>
     </section>
 
-    <section class="slide" id="slide-15">
-      <div class="slide-number">15 / 15</div>
+    <section class="slide" id="slide-18">
+      <div class="slide-number">18 / 18</div>
       <div class="slide-body"><h1>🟡 Intermediate Checkpoint: Module 4</h1>
 <ul class="checklist">
 <li><input type="checkbox"  disabled> Explain the marketplace → plugin → command/agent hierarchy</li>
 <li><input type="checkbox"  disabled> State the difference between a marketplace and a plugin</li>
-<li><input type="checkbox"  disabled> Tell when to use a command vs. a skill vs. an agent</li>
+<li><input type="checkbox"  disabled> Tell when to use a command vs. a skill vs. an agent vs. a hook</li>
+<li><input type="checkbox"  disabled> Explain why a hook fires deterministically while the other three involve Claude reasoning</li>
 <li><input type="checkbox"  disabled> Add a marketplace with <code>/plugin marketplace add</code></li>
 <li><input type="checkbox"  disabled> Install a plugin with <code>/plugin install <plugin>@<marketplace></code></li>
 <li><input type="checkbox"  disabled> Lay out a marketplace repo: <code>marketplace.json</code> + plugin + <code>plugin.json</code></li>
@@ -613,16 +674,16 @@
   <footer class="controls">
     <button class="btn" id="btn-prev" onclick="prevSlide()" disabled>&#8592; Prev</button>
     <div class="progress-wrap">
-      <div class="progress-bar" id="progress-bar" style="width: 6.7%"></div>
+      <div class="progress-bar" id="progress-bar" style="width: 5.6%"></div>
     </div>
-    <span class="slide-counter" id="counter">1 / 15</span>
+    <span class="slide-counter" id="counter">1 / 18</span>
     <button class="btn btn-primary" id="btn-next" onclick="nextSlide()">Next &#8594;</button>
     <span class="kbd-hint"><kbd>←</kbd><kbd>→</kbd> navigate</span>
   </footer>
 
   <script>
     let current = 0;
-    const total = 15;
+    const total = 18;
     const slides = document.querySelectorAll('.slide');
 
     function show(n) {

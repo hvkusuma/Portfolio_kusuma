@@ -91,13 +91,106 @@ You decide how much to include — a plugin can be just one command, or all of t
 
 ---
 
-## Command vs. Skill vs. Agent (15 min)
+## Command vs. Skill vs. Agent vs. Hook (20 min)
 
-These three are easy to confuse. Here's when to reach for each:
+These four are easy to confuse because they're all "instructions Claude follows" — but each one differs in **who triggers it** and **how much isolation it gets**. We'll build one small example of each, using the same documentation task (style checking), so you can see them side by side. These are the *exact same four files* you'll find bundled into a real plugin later in this module (see "Anatomy of a Marketplace Repo" below) — so what you learn here is the plugin you'll be reading in twenty minutes.
 
-- **Command** — a reusable instruction you run on demand: `/check-style`, `/release-notes`. This is everything you built in Module 3. It runs only when you type it.
-- **Skill** (`SKILL.md`) — like a command, but its YAML frontmatter has a `description`, so **Claude can auto-invoke it** when your request matches. Good for "whenever I ask about X, apply this."
-- **Agent** — an isolated worker with its own context window, tool permissions, and model. Best for a **multi-step job you delegate** (e.g. "audit this whole doc set"). Claude can also auto-delegate to it.
+### Command — you trigger it, it runs once
+
+A **command** is a reusable instruction you run on demand by typing `/name`. It never runs unless you ask.
+
+```markdown
+# commands/check-style.md
+
+You are a technical editor. Review the documentation file at: $ARGUMENTS
+
+Check for:
+- Active voice, second person ("you")
+- Sentences under 25 words
+- Headings in sentence case (not Title Case)
+
+Output a table: Line | Issue | Fix
+```
+
+Usage: `/check-style docs/orders-api.md` — this is everything you built in Module 3.
+
+### Skill — Claude can trigger it too
+
+A **skill** (`SKILL.md`) is structurally almost the same file, but its YAML frontmatter adds a `description`. That description is what lets **Claude auto-invoke it** when your request matches, without you typing `/`.
+
+```markdown
+# skills/doc-coverage/SKILL.md
+---
+name: doc-coverage
+description: Use when a code change might need matching documentation updates — compares a diff against the docs folder and flags undocumented additions.
+---
+
+Compare the code change at $ARGUMENTS against the documentation folder.
+List every new or changed public function, endpoint, or config option that
+has no corresponding documentation update.
+
+Output: a checklist of undocumented items, one per line.
+```
+
+Usage: you can still type `/doc-coverage <diff>` — but you can also just say "does this PR need doc updates?" and Claude reads the description, recognizes the match, and loads the skill on its own.
+
+### Agent — an isolated worker you delegate a whole job to
+
+An **agent** (subagent) is different in kind, not just degree: it runs in its **own context window**, with its **own tool permissions and model**, and reports back only a summary. Use it for multi-step jobs, not single checks.
+
+```markdown
+# agents/doc-auditor.md
+---
+name: doc-auditor
+description: Audits an entire documentation set for completeness and style. Use for multi-file jobs, not single-file checks.
+tools: Read, Grep, Glob
+model: sonnet
+---
+
+You are a documentation audit lead. Given a folder, read every file in it,
+apply the team's style rules (active voice, sentence case headings, <25-word
+sentences) and completeness rules (required sections present), and produce
+one consolidated report ranked by severity. Do not paste full file contents
+back — summarize.
+```
+
+Usage: "Use the doc-auditor agent to review everything in docs/." The agent can read dozens of files — even re-use the `check-style` logic internally — but your main conversation only sees the final report, not the file-by-file churn.
+
+### Hook — fires automatically, no reasoning involved
+
+A **hook** is the odd one out: it isn't "instructions Claude follows" at all, it's a **shell command Claude Code runs automatically** on a lifecycle event (a file edit, a session end, a tool call). No prompt, no reasoning — it fires the same way every time, which makes it the right tool for a rule that must never be skipped.
+
+```json
+// hooks/hooks.json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Reminder: run /check-style on this file before committing.'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+This fires after *every* edit or file write — no exceptions, no chance Claude "forgets" to remind you.
+
+### How the four connect
+
+| | Who triggers it | Isolation | Best for |
+|---|---|---|---|
+| **Hook** | An event (edit, commit, session end) | None — just runs a command | Rules that must *always* fire, deterministically |
+| **Command** | You, typing `/name` | Runs in your current conversation | A check you consciously run when you want it |
+| **Skill** | You (`/name`) *or* Claude, automatically | Runs in your current conversation | "Whenever a request looks like X, apply this" |
+| **Agent** | You, or Claude delegating | Its own context window | A multi-step job too big to run inline |
+
+Put together, a realistic workflow chains all four: a **hook** nudges you after every edit → you (or Claude) run the **skill**/**command** to check one file → for a full pre-release sweep, you delegate to the **agent**, which does the heavy reading and hands back one report. All four ship together inside one **plugin**, and a **plugin** is what a **marketplace** distributes to your team — that's the packaging layer we build next.
 
 **Namespacing.** Once bundled in a plugin, components are prefixed with the plugin name to avoid collisions. A `check-style` command in the `doc-skills` plugin is invoked as:
 
@@ -277,7 +370,8 @@ Before moving to Module 5, confirm you can:
 
 - [ ] Explain the marketplace → plugin → command/agent hierarchy in your own words
 - [ ] State the difference between a marketplace and a plugin
-- [ ] Tell when to use a command vs. a skill vs. an agent
+- [ ] Tell when to use a command vs. a skill vs. an agent vs. a hook
+- [ ] Explain why a hook runs deterministically while a command/skill/agent all involve Claude reasoning
 - [ ] Add a marketplace with `/plugin marketplace add`
 - [ ] Install a plugin with `/plugin install <plugin>@<marketplace>`
 - [ ] Lay out a marketplace repo: `marketplace.json`, a plugin folder, and `plugin.json`
