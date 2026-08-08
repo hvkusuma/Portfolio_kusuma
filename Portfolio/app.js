@@ -1,12 +1,16 @@
 // Load and render resume from resume.json
 async function loadResume() {
     try {
-        const response = await fetch('resume.json');
+        const basePath = window.location.pathname.includes('/Portfolio_kusuma/')
+            ? '/Portfolio_kusuma/'
+            : '/';
+        const response = await fetch(`${basePath}resume.json`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const resume = await response.json();
         renderResume(resume);
     } catch (error) {
         console.error('Error loading resume:', error);
-        document.querySelector('.container').innerHTML = '<p>Error loading resume. Please ensure resume.json is in the same directory.</p>';
+        document.querySelector('.container').innerHTML = '<p>Error loading resume. Please ensure resume.json is in the same directory. Error: ' + error.message + '</p>';
     }
 }
 
