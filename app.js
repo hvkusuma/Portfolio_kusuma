@@ -87,7 +87,6 @@ function renderBasics(basics) {
 
     // Set phone
     if (basics.phone) {
-        document.getElementById('basics-phone').textContent = basics.phone;
         document.getElementById('basics-phone-text').textContent = basics.phone;
         document.getElementById('basics-phone').classList.remove('hidden');
     }
@@ -98,7 +97,6 @@ function renderBasics(basics) {
         if (basics.location.city) locationParts.push(basics.location.city);
         if (basics.location.region) locationParts.push(basics.location.region);
         if (locationParts.length > 0) {
-            document.getElementById('basics-location').textContent = locationParts.join(', ');
             document.getElementById('basics-location-text').textContent = locationParts.join(', ');
             document.getElementById('basics-location').classList.remove('hidden');
         }
