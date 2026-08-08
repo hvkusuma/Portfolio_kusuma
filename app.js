@@ -1,15 +1,31 @@
 // Load and render resume from resume.json
 async function loadResume() {
     try {
+        console.log('Starting to load resume...');
         const response = await fetch('resume.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        console.log('Resume JSON fetched successfully');
         const resume = await response.json();
+        console.log('Resume data:', resume);
+
+        // Check if required elements exist
+        const container = document.querySelector('.container');
+        if (!container) {
+            throw new Error('Container element not found');
+        }
+
+        console.log('Starting to render resume...');
         renderResume(resume);
+        console.log('Resume rendered successfully');
     } catch (error) {
-        console.error('Error loading resume:', error);
-        document.querySelector('.container').innerHTML = '<p>Error loading resume. ' + error.message + '</p>';
+        console.error('Fatal error loading resume:', error);
+        const errorMsg = error.message || error.toString();
+        const container = document.querySelector('.container');
+        if (container) {
+            container.innerHTML = '<div class="error-message"><h2>Error Loading Portfolio</h2><p>' + escapeHtml(errorMsg) + '</p><p>Check browser console (F12) for more details</p></div>';
+        }
     }
 }
 
@@ -345,4 +361,8 @@ function formatDate(dateString) {
 }
 
 // Load resume when DOM is ready
-document.addEventListener('DOMContentLoaded', loadResume);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadResume);
+} else {
+    loadResume();
+}
