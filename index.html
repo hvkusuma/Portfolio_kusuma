@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header/Basics Section -->
+        <header id="basics" class="section">
+            <div class="basics-content">
+                <div class="basics-left">
+                    <img id="basics-image" src="" alt="Profile photo" class="profile-image hidden">
+                    <h1 id="basics-name">Portfolio</h1>
+                    <p id="basics-label" class="label hidden"></p>
+                </div>
+                <div class="basics-right">
+                    <p id="basics-summary" class="summary hidden"></p>
+                    <div class="contact-info">
+                        <a id="basics-email" href="" class="contact-item hidden">
+                            <span class="contact-icon">✉</span>
+                            <span id="basics-email-text"></span>
+                        </a>
+                        <p id="basics-phone" class="contact-item hidden">
+                            <span class="contact-icon">☎</span>
+                            <span id="basics-phone-text"></span>
+                        </p>
+                        <p id="basics-location" class="contact-item hidden">
+                            <span class="contact-icon">📍</span>
+                            <span id="basics-location-text"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Work Experience Section -->
+        <section id="work-section" class="section hidden">
+            <h2>Professional Experience</h2>
+            <div id="work-list" class="list"></div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education-section" class="section hidden">
+            <h2>Education</h2>
+            <div id="education-list" class="list"></div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills-section" class="section hidden">
+            <h2>Skills</h2>
+            <div id="skills-list" class="skills-grid"></div>
+        </section>
+
+        <!-- Certificates Section -->
+        <section id="certificates-section" class="section hidden">
+            <h2>Certifications</h2>
+            <div id="certificates-list" class="list"></div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects-section" class="section hidden">
+            <h2>Projects</h2>
+            <div id="projects-list" class="list"></div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
