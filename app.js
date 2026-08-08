@@ -1,39 +1,15 @@
 // Load and render resume from resume.json
 async function loadResume() {
     try {
-        // Try multiple possible paths for resume.json
-        const paths = [
-            './resume.json',
-            '/Portfolio_kusuma/resume.json',
-            window.location.origin + window.location.pathname.replace(/\/$/, '') + '/resume.json'
-        ];
-
-        let resume = null;
-        let lastError = null;
-
-        for (const path of paths) {
-            try {
-                console.log('Trying to fetch:', path);
-                const response = await fetch(path);
-                if (response.ok) {
-                    resume = await response.json();
-                    console.log('Successfully loaded resume from:', path);
-                    break;
-                }
-            } catch (err) {
-                lastError = err;
-                console.log('Failed to fetch from ' + path + ':', err.message);
-            }
+        const response = await fetch('resume.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        if (!resume) {
-            throw lastError || new Error('Could not load resume.json from any path');
-        }
-
+        const resume = await response.json();
         renderResume(resume);
     } catch (error) {
         console.error('Error loading resume:', error);
-        document.querySelector('.container').innerHTML = '<p>Error loading resume data. ' + error.message + '</p>';
+        document.querySelector('.container').innerHTML = '<p>Error loading resume. ' + error.message + '</p>';
     }
 }
 
