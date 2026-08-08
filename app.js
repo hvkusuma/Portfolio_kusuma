@@ -51,44 +51,62 @@ function renderResume(resume) {
 }
 
 function renderBasics(basics) {
+    const safeSetText = (id, text) => {
+        const el = document.getElementById(id);
+        if (!el) {
+            console.error(`Element with id "${id}" not found`);
+            return null;
+        }
+        el.textContent = text;
+        return el;
+    };
+
     // Set name
     if (basics.name) {
-        document.getElementById('basics-name').textContent = basics.name;
+        safeSetText('basics-name', basics.name);
         document.title = `${basics.name} - Portfolio`;
     }
 
     // Set label
     if (basics.label) {
-        document.getElementById('basics-label').textContent = basics.label;
-        document.getElementById('basics-label').classList.remove('hidden');
+        const el = safeSetText('basics-label', basics.label);
+        if (el) el.classList.remove('hidden');
     }
 
     // Set image
     if (basics.image) {
         const imgElement = document.getElementById('basics-image');
-        imgElement.src = basics.image;
-        imgElement.classList.remove('hidden');
+        if (imgElement) {
+            imgElement.src = basics.image;
+            imgElement.classList.remove('hidden');
+        }
     }
 
     // Set summary
     if (basics.summary) {
-        document.getElementById('basics-summary').textContent = basics.summary;
-        document.getElementById('basics-summary').classList.remove('hidden');
+        const el = safeSetText('basics-summary', basics.summary);
+        if (el) el.classList.remove('hidden');
     }
 
     // Set email
     if (basics.email) {
         const emailElement = document.getElementById('basics-email');
         const emailText = document.getElementById('basics-email-text');
-        emailElement.href = `mailto:${basics.email}`;
-        emailText.textContent = basics.email;
-        emailElement.classList.remove('hidden');
+        if (emailElement && emailText) {
+            emailElement.href = `mailto:${basics.email}`;
+            emailText.textContent = basics.email;
+            emailElement.classList.remove('hidden');
+        }
     }
 
     // Set phone
     if (basics.phone) {
-        document.getElementById('basics-phone-text').textContent = basics.phone;
-        document.getElementById('basics-phone').classList.remove('hidden');
+        const phoneText = document.getElementById('basics-phone-text');
+        const phoneElement = document.getElementById('basics-phone');
+        if (phoneText && phoneElement) {
+            phoneText.textContent = basics.phone;
+            phoneElement.classList.remove('hidden');
+        }
     }
 
     // Set location
@@ -97,8 +115,12 @@ function renderBasics(basics) {
         if (basics.location.city) locationParts.push(basics.location.city);
         if (basics.location.region) locationParts.push(basics.location.region);
         if (locationParts.length > 0) {
-            document.getElementById('basics-location-text').textContent = locationParts.join(', ');
-            document.getElementById('basics-location').classList.remove('hidden');
+            const locText = document.getElementById('basics-location-text');
+            const locElement = document.getElementById('basics-location');
+            if (locText && locElement) {
+                locText.textContent = locationParts.join(', ');
+                locElement.classList.remove('hidden');
+            }
         }
     }
 }
