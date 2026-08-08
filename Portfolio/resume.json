@@ -1,0 +1,181 @@
+{
+  "basics": {
+    "name": "Kusuma H V",
+    "label": "Certified Technical Writer",
+    "image": "",
+    "email": "kusumakiran2011@gmail.com",
+    "phone": "+91 9481291233",
+    "url": "",
+    "summary": "An Engineer and literature enthusiast with excellent communication abilities. Creative thinker, meticulous writer, and passionate about research with significant contributions in both technical and academic domains through diverse roles. Experienced in project management, technical documentation, content creation, and education.",
+    "location": {
+      "address": "",
+      "postalCode": "",
+      "city": "Bangalore",
+      "countryCode": "IN",
+      "region": "India"
+    },
+    "profiles": []
+  },
+  "work": [
+    {
+      "name": "HireQuotient",
+      "position": "Technical Content Writer (Freelancer)",
+      "startDate": "2023-01",
+      "endDate": "",
+      "summary": "",
+      "highlights": [
+        "Pitch content ideas and write feature articles for IT industry publications",
+        "Conduct primary and secondary research to create authentic and informative technical content",
+        "Enhance multimedia content visibility and reach through SEO optimization strategies",
+        "Collaborate with marketing teams on website optimization and social media promotion strategies"
+      ],
+      "url": "",
+      "location": "Remote"
+    },
+    {
+      "name": "Marigold International School",
+      "position": "English Teacher",
+      "startDate": "2021-06",
+      "endDate": "2022-01",
+      "summary": "",
+      "highlights": [
+        "Taught English language and literature to students across multiple grade levels",
+        "Managed both online and offline classes during hybrid learning environment"
+      ],
+      "url": "",
+      "location": "Bangalore"
+    },
+    {
+      "name": "L&T Infotech",
+      "position": "Software Engineer",
+      "startDate": "2010-06",
+      "endDate": "2013-07",
+      "summary": "2.5 years of experience in technical documentation and embedded systems projects.",
+      "highlights": [
+        "Developed technical documentation for firmware across 2.5 years in the role",
+        "Worked on Sony DLNA (Digital Living Network Alliance) project documentation",
+        "Contributed to L&T Embedded system RG (Residential Gateway) project as documentation team member",
+        "Created text, audio, and video documentation for multiple technical projects"
+      ],
+      "url": "",
+      "location": "Bangalore"
+    },
+    {
+      "name": "VVIET",
+      "position": "Lecturer",
+      "startDate": "2008-07",
+      "endDate": "2010-06",
+      "summary": "Teaching and leadership roles in academic environment with focus on technical education and student development.",
+      "highlights": [
+        "Taught computer subjects including C programming language to engineering students",
+        "Ensured successful internal and external communication with all stakeholders",
+        "Headed the Event Management team that organized and conducted Curricular and Cultural events",
+        "Served as part of Editorial Board curating annual magazines, reports, and newsletters; trained colleagues and students in soft skills"
+      ],
+      "url": "",
+      "location": "Bangalore"
+    }
+  ],
+  "education": [
+    {
+      "institution": "Regional Institute of English, South India",
+      "studyType": "PGDELT",
+      "area": "English Language Teaching",
+      "startDate": "2023",
+      "endDate": "2023"
+    },
+    {
+      "institution": "Bangalore University",
+      "studyType": "Bachelor of Education",
+      "area": "Education",
+      "startDate": "2022",
+      "endDate": "2022"
+    },
+    {
+      "institution": "Kuvempu University",
+      "studyType": "Master of Arts",
+      "area": "English Literature",
+      "startDate": "2020",
+      "endDate": "2020"
+    },
+    {
+      "institution": "Visvesvaraya Technological University",
+      "studyType": "Bachelor of Engineering",
+      "area": "Information Science",
+      "startDate": "2008",
+      "endDate": "2008"
+    },
+    {
+      "institution": "Karnataka Pre-University Board",
+      "studyType": "Pre-University Certificate",
+      "area": "PCMB",
+      "startDate": "2004",
+      "endDate": "2004"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Technical Writing",
+      "level": "Expert",
+      "keywords": [
+        "Structured content authoring",
+        "User-centered documentation",
+        "UX writing",
+        "Content development and management"
+      ]
+    },
+    {
+      "name": "Communication",
+      "level": "Expert",
+      "keywords": [
+        "Oral and written communication",
+        "Technical writing",
+        "Content strategy"
+      ]
+    },
+    {
+      "name": "Documentation Tools",
+      "level": "Advanced",
+      "keywords": [
+        "Oxygen XML",
+        "DITA",
+        "Adobe FrameMaker",
+        "Adobe Acrobat",
+        "MadCap Flare",
+        "Markdown",
+        "Github"
+      ]
+    },
+    {
+      "name": "Content and Marketing Tools",
+      "level": "Advanced",
+      "keywords": [
+        "Camtasia",
+        "Snagit",
+        "JIRA",
+        "Confluence",
+        "Style guides"
+      ]
+    },
+    {
+      "name": "Professional Skills",
+      "level": "Advanced",
+      "keywords": [
+        "Education and training",
+        "MS Office",
+        "Agile methodology",
+        "Project management",
+        "SEO strategies"
+      ]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Technical Writing for IT Industry",
+      "issuer": "Tech Writer's Tribe",
+      "startDate": "2023-01",
+      "endDate": "2023-03"
+    }
+  ],
+  "projects": []
+}
